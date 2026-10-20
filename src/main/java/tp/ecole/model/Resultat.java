@@ -22,12 +22,35 @@ package tp.ecole.model;
 public class Resultat {
 
     // TODO : déclarez les attributs privés (numEleve, numCours, points)
+    private int numEleve;
+    private int numCours;
+    private Float points;
 
     // TODO : constructeur par défaut
+    public Resultat(){}
 
     // TODO : constructeur avec tous les paramètres
+    public Resultat(int numEleve, int numCours, Float points){
+        this.numEleve = numEleve;
+        this.numCours = numCours;
+        this.points = points;
+    }
 
     // TODO : getters et setters
+    public int getNumEleve(int numEleve){return numEleve;}
+    public int getNumCours(int numCours){return numCours;}
+    public Float getPoints(Float points){return points;}
+
+    public void setNumEleve(int numEleve){this.numEleve = numEleve;}
+    public void setNumCours(int numCours){this.numCours = numCours;}
+    public void setPoints(Float points){this.points = points;}
 
     // TODO : toString()
+    @Override
+    public String toString(){
+        return "RESULTAT : \n"
+                + "\nELEVE : " + numEleve
+                + "\nCOURS : "+ numCours
+                + "\nPoints : " + points;
+    }
 }
