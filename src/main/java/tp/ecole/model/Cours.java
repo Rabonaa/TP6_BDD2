@@ -22,13 +22,13 @@ public class Cours {
     // TODO : déclarez les attributs privés (numCours, nom, nbHeures, annee)
     private int numCours;
     private String nom;
-    private Float nbHeures;
+    private double nbHeures;
     private int annee;
 
     // TODO : constructeur par défaut
     public Cours(){}
     // TODO : constructeur avec tous les paramètres
-    public Cours(int nummCours, String nom, Float nbHeures, int annee){
+    public Cours(int nummCours, String nom, double nbHeures, int annee){
         this.numCours = numCours;
         this.nom = nom;
         this.nbHeures = nbHeures;
@@ -37,7 +37,7 @@ public class Cours {
     // TODO : getters et setters
     public int getNumCours(){return numCours;}
     public String getNom(){return nom;}
-    public Float getNbHeures(){return nbHeures;}
+    public double getNbHeures(){return nbHeures;}
     public int getAnnee(){return annee;}
 
     public void setNumCours(){this.numCours = numCours;}
@@ -48,9 +48,9 @@ public class Cours {
     // TODO : toString()
     @Override
     public String toString(){
-        return "COURS " + numCours + " :\n"
-                + "\n Nom du cours : " + nom
-                + "\n Nombre d'heures : " + nbHeures
-                + "\n Annee : " + annee;
+        return "COURS " + numCours + " :"
+                + "\nNom du cours : " + nom
+                + "\nNombre d'heures : " + nbHeures
+                + "\nAnnee : " + annee + "\n";
     }
 }
