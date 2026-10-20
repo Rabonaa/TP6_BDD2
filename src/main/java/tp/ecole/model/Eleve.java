@@ -38,6 +38,9 @@ public class Eleve {
     private String genre;
 
     // TODO : constructeur par défaut
+    public Eleve(){};
+
+    // TODO : constructeur avec tous les paramètres
     public Eleve(int numEleve, String nom, String prenom, LocalDate dateNaissance,
                  Float poids, int annee, String genre){
         this.nom = nom;
@@ -48,10 +51,32 @@ public class Eleve {
         this.genre = genre;
     }
 
-    // TODO : constructeur avec tous les paramètres
-
-
     // TODO : getters et setters
+    public int getNumEleve(){return numEleve;}
+    public String getNom(){return nom;}
+    public String getPrenom(){return prenom;}
+    public LocalDate getDateNaissance(){return dateNaissance;}
+    public Float getPoids(){return poids;}
+    public int getAnnee(){return annee;}
+    public String getGenre(){return genre;}
+
+    public void setNumEleve(int numEleve){this.numEleve = numEleve;}
+    public void setNom(String nom){this.nom = nom;}
+    public void setPrenom(String prenom){this.prenom = prenom;}
+    public void setDateNaissance(LocalDate dateNaissance){this.dateNaissance = dateNaissance;}
+    public void setPoids(Float poids){this.poids = poids;}
+    public void setAnnee(int annee){this.annee = annee;}
+    public void setGenre(String genre){this.genre = genre;}
 
     // TODO : toString()
+    @Override
+    public String toString(){
+        return "ELEVE " + numEleve + ": \n"
+                + "Nom : " + nom
+                + "\nPrenom : " + prenom
+                + "\nDate de Naissance :" + dateNaissance
+                + "\n Poids : " + poids
+                + "\n Annee : " + annee
+                + "\n Genre : " + genre;
+    }
 }
