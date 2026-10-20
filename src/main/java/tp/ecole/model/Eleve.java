@@ -29,10 +29,27 @@ public class Eleve {
 
     // TODO : déclarez les attributs privés (numEleve, nom, prenom,
     //         dateNaissance, poids, annee, genre)
+    private int numEleve;
+    private String nom;
+    private String prenom;
+    private LocalDate dateNaissance;
+    private Float poids;
+    private int annee;
+    private String genre;
 
     // TODO : constructeur par défaut
+    public Eleve(int numEleve, String nom, String prenom, LocalDate dateNaissance,
+                 Float poids, int annee, String genre){
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+        this.poids = poids;
+        this.annee = annee;
+        this.genre = genre;
+    }
 
     // TODO : constructeur avec tous les paramètres
+
 
     // TODO : getters et setters
 
