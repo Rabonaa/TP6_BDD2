@@ -37,9 +37,9 @@ public class Resultat {
     }
 
     // TODO : getters et setters
-    public int getNumEleve(int numEleve){return numEleve;}
-    public int getNumCours(int numCours){return numCours;}
-    public double getPoints(double points){return points;}
+    public int getNumEleve(){return numEleve;}
+    public int getNumCours(){return numCours;}
+    public double getPoints(){return points;}
 
     public void setNumEleve(int numEleve){this.numEleve = numEleve;}
     public void setNumCours(int numCours){this.numCours = numCours;}
@@ -48,7 +48,7 @@ public class Resultat {
     // TODO : toString()
     @Override
     public String toString(){
-        return "RESULTAT : "
+        return "RESULTAT"
                 + "\nELEVE : " + numEleve
                 + "\nCOURS : "+ numCours
                 + "\nPoints : " + points + "\n";
