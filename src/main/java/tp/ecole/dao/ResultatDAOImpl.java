@@ -33,7 +33,26 @@ public class ResultatDAOImpl implements ResultatDAO {
     @Override
     public List<Resultat> findByEleve(int numEleve) throws SQLException {
         // TODO : Retourner une liste de résultats pour un élève donné
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+        List<Resultat> resultats = new ArrayList<>();
+
+        String sql = "SELECT * FROM Resultat WHERE num_eleve = ?";
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, numEleve);
+            try(ResultSet result = pstmt.executeQuery()){
+                while (result.next()){
+                    Resultat resultat = new Resultat();
+                    resultat.setNumEleve(result.getInt("num_eleve"));
+                    resultat.setNumEleve(result.getInt("num_cours"));
+                    resultat.setPoints(result.getDouble("note"));
+                    resultats.add(resultat);
+                }
+            }
+        }
+        return resultats;
+        //throw new UnsupportedOperationException("À implémenter — Question 4");
+
     }
 
     @Override
