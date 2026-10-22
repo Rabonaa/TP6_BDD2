@@ -51,7 +51,7 @@ public class EleveDAOImpl implements EleveDAO {
             }
         }
         if(eleves.isEmpty()){
-            throw new UnsupportedOperationException("Aucun eleve trouve.");
+            System.out.println("Aucun eleve trouve.");
         }
         return eleves;
     }
@@ -79,7 +79,7 @@ public class EleveDAOImpl implements EleveDAO {
             }
         }
         if(ligne == null)
-            throw new UnsupportedOperationException("Eleve non trouve.");
+            System.out.println("Aucun eleve trouve.");
         return ligne;
     }
 
@@ -108,7 +108,7 @@ public class EleveDAOImpl implements EleveDAO {
                 }
         }
         if(eleves.isEmpty()){
-            throw new UnsupportedOperationException("Aucun eleve trouve.");
+            System.out.println("Aucun eleve trouve.");
         }
         return eleves;
     }
@@ -131,7 +131,7 @@ public class EleveDAOImpl implements EleveDAO {
             int lignesInsere = pstmt.executeUpdate();
 
             if(lignesInsere == 0){
-                throw new UnsupportedOperationException("Insertion echoue");
+                System.out.println("Erreur d'insertion");
             }
         }
     }
