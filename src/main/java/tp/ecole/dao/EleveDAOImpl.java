@@ -43,7 +43,7 @@ public class EleveDAOImpl implements EleveDAO {
                     ligne.setPrenom(rs.getString("prenom"));
                     LocalDate dateN = rs.getObject("date_naissance", LocalDate.class);
                     ligne.setDateNaissance(dateN);
-                    ligne.setPoids(rs.getFloat("poids"));
+                    ligne.setPoids(rs.getDouble("poids"));
                     ligne.setAnnee(rs.getInt("annee"));
                     ligne.setGenre(rs.getString("genre"));
                     eleves.add(ligne);
@@ -59,46 +59,100 @@ public class EleveDAOImpl implements EleveDAO {
     @Override
     public Eleve findById(int numEleve) throws SQLException {
         // TODO : SELECT * FROM ELEVES WHERE NUM_ELEVE = ?
+        Eleve ligne = null;
         String sql = "SELECT * FROM ELEVES WHERE NUM_ELEVE = ?";
-        Eleve eleve = new Eleve();
         try(Connection connection = ConnectionManager.getConnection();
             PreparedStatement pstmt = connection.prepareStatement(sql)){
             pstmt.setInt(1, numEleve);
             try(ResultSet rs = pstmt.executeQuery()){
                 if(rs.next()){
-                    eleve.setNumEleve(rs.getInt("num_eleve"));
-                    eleve.setNom(rs.getString("nom"));
-                    eleve.setPrenom(rs.getString("prenom"));
+                    ligne = new Eleve();
+                    ligne.setNumEleve(rs.getInt("num_eleve"));
+                    ligne.setNom(rs.getString("nom"));
+                    ligne.setPrenom(rs.getString("prenom"));
                     LocalDate dateN = rs.getObject("date_naissance", LocalDate.class);
-                    eleve.setDateNaissance(dateN);
-                    eleve.setPoids(rs.getFloat("poids"));
-                    eleve.setAnnee(rs.getInt("annee"));
-                    eleve.setGenre(rs.getString("genre"));
+                    ligne.setDateNaissance(dateN);
+                    ligne.setPoids(rs.getDouble("poids"));
+                    ligne.setAnnee(rs.getInt("annee"));
+                    ligne.setGenre(rs.getString("genre"));
                 }
             }
         }
-        if(eleve == null)
+        if(ligne == null)
             throw new UnsupportedOperationException("Eleve non trouve.");
-        return eleve;
+        return ligne;
     }
 
     @Override
     public List<Eleve> findByNom(String nom) throws SQLException {
         // TODO : SELECT * FROM ELEVES WHERE NOM LIKE ?
         //        (penser à ajouter '%' pour une recherche partielle)
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+        String sql = "SELECT * FROM ELEVES WHERE NOM LIKE ?";
+        List<Eleve> eleves = new ArrayList<>();
+        try(Connection connection = ConnectionManager.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sql)){
+                pstmt.setString(1, "%" + nom + "%");
+                try(ResultSet rs = pstmt.executeQuery()){
+                    while(rs.next()){
+                        Eleve ligne = new Eleve();
+                        ligne.setNumEleve(rs.getInt("num_eleve"));
+                        ligne.setNom(rs.getString("nom"));
+                        ligne.setPrenom(rs.getString("prenom"));
+                        LocalDate dateN = rs.getObject("date_naissance", LocalDate.class);
+                        ligne.setDateNaissance(dateN);
+                        ligne.setPoids(rs.getDouble("poids"));
+                        ligne.setAnnee(rs.getInt("annee"));
+                        ligne.setGenre(rs.getString("genre"));
+                        eleves.add(ligne);
+                    }
+                }
+        }
+        if(eleves.isEmpty()){
+            throw new UnsupportedOperationException("Aucun eleve trouve.");
+        }
+        return eleves;
     }
 
     @Override
     public void save(Eleve eleve) throws SQLException {
         // TODO : INSERT INTO ELEVES (NUM_ELEVE, NOM, PRENOM, ...) VALUES (?, ?, ?, ...)
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+        String sql = "INSERT INTO ELEVES (NUM_ELEVE, NOM, PRENOM, DATE_NAISSANCE, POIDS, ANNEE, GENRE)" +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try(Connection connection = ConnectionManager.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setInt(1, eleve.getNumEleve());
+            pstmt.setString(2, eleve.getNom());
+            pstmt.setString(3, eleve.getPrenom());
+            pstmt.setObject(4, eleve.getDateNaissance());
+            pstmt.setDouble(5, eleve.getPoids());
+            pstmt.setInt(6, eleve.getAnnee());
+            pstmt.setString(7, eleve.getGenre());
+
+            int lignesInsere = pstmt.executeUpdate();
+
+            if(lignesInsere == 0){
+                throw new UnsupportedOperationException("Insertion echoue");
+            }
+        }
     }
 
     @Override
     public void update(Eleve eleve) throws SQLException {
         // TODO : UPDATE ELEVES SET NOM=?, PRENOM=?, ... WHERE NUM_ELEVE=?
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+//        throw new UnsupportedOperationException("Erreur");
+        String sql = "UPDATE ELEVES SET NOM=?, PRENOM=?, DATE_NAISSANCE=?, POIDS=?, ANNEE=?, GENRE=? " +
+                "WHERE NUM_ELEVE=?";
+        try(Connection connection = ConnectionManager.getConnection();
+                PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setString(1, eleve.getNom());
+            pstmt.setString(2, eleve.getPrenom());
+            pstmt.setObject(3, eleve.getDateNaissance());
+            pstmt.setDouble(4, eleve.getPoids());
+            pstmt.setInt(5, eleve.getAnnee());
+            pstmt.setString(6, eleve.getGenre());
+            pstmt.setInt(7, eleve.getNumEleve());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
@@ -106,6 +160,34 @@ public class EleveDAOImpl implements EleveDAO {
         // TODO : DELETE FROM ELEVES WHERE NUM_ELEVE=?
         //        Attention : vérifiez qu'il n'y a pas de contraintes de clé étrangère
         //        (l'élève peut avoir des RESULTATS ou ACTIVITES_PRATIQUEES)
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+//        throw new UnsupportedOperationException("À implémenter — Question 4");
+        String sqlResultats = "DELETE FROM RESULTATS WHERE NUM_ELEVE = ?";
+        String sqlActivites = "DELETE FROM ACTIVITES_PRATIQUEES WHERE NUM_ELEVE = ?";
+        String sqlEleve = "DELETE FROM ELEVES WHERE NUM_ELEVE = ?";
+
+        try (Connection connection = ConnectionManager.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                try (PreparedStatement pstmt1 = connection.prepareStatement(sqlResultats)) {
+                    pstmt1.setInt(1, numEleve);
+                    pstmt1.executeUpdate();
+                }
+
+                try (PreparedStatement pstmt2 = connection.prepareStatement(sqlActivites)) {
+                    pstmt2.setInt(1, numEleve);
+                    pstmt2.executeUpdate();
+                }
+
+                // Suppression de l'élève
+                try (PreparedStatement pstmt3 = connection.prepareStatement(sqlEleve)) {
+                    pstmt3.setInt(1, numEleve);
+                    pstmt3.executeUpdate();
+                }
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
+        }
     }
 }
