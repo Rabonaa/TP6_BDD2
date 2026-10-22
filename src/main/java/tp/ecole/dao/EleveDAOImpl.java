@@ -28,26 +28,28 @@ import java.util.List;
  */
 public class EleveDAOImpl implements EleveDAO {
 
+    private Eleve mapResultSetToEleve(ResultSet rs) throws SQLException {
+        Eleve ligne = new Eleve();
+        ligne.setNumEleve(rs.getInt("num_eleve"));
+        ligne.setNom(rs.getString("nom"));
+        ligne.setPrenom(rs.getString("prenom"));
+        ligne.setDateNaissance(rs.getObject("date_naissance", LocalDate.class));
+        ligne.setPoids(rs.getDouble("poids"));
+        ligne.setAnnee(rs.getInt("annee"));
+        ligne.setGenre(rs.getString("genre"));
+        return ligne;
+    }
+
     @Override
     public List<Eleve> findAll() throws SQLException {
         // TODO : interroger la table ELEVES et retourner tous les élèves
-        String sql = "SELECT * FROM Eleves";
+        String sql = "SELECT * FROM ELEVES";
         List<Eleve> eleves = new ArrayList<>();
-        try(Connection connection = ConnectionManager.getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(sql)){
-            try(ResultSet rs = pstmt.executeQuery()){
-                while(rs.next()){
-                    Eleve ligne = new Eleve();
-                    ligne.setNumEleve(rs.getInt("num_eleve"));
-                    ligne.setNom(rs.getString("nom"));
-                    ligne.setPrenom(rs.getString("prenom"));
-                    LocalDate dateN = rs.getObject("date_naissance", LocalDate.class);
-                    ligne.setDateNaissance(dateN);
-                    ligne.setPoids(rs.getDouble("poids"));
-                    ligne.setAnnee(rs.getInt("annee"));
-                    ligne.setGenre(rs.getString("genre"));
-                    eleves.add(ligne);
-                }
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                eleves.add(mapResultSetToEleve(rs));
             }
         }
         if(eleves.isEmpty()){
@@ -59,28 +61,18 @@ public class EleveDAOImpl implements EleveDAO {
     @Override
     public Eleve findById(int numEleve) throws SQLException {
         // TODO : SELECT * FROM ELEVES WHERE NUM_ELEVE = ?
-        Eleve ligne = null;
         String sql = "SELECT * FROM ELEVES WHERE NUM_ELEVE = ?";
-        try(Connection connection = ConnectionManager.getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(sql)){
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, numEleve);
-            try(ResultSet rs = pstmt.executeQuery()){
-                if(rs.next()){
-                    ligne = new Eleve();
-                    ligne.setNumEleve(rs.getInt("num_eleve"));
-                    ligne.setNom(rs.getString("nom"));
-                    ligne.setPrenom(rs.getString("prenom"));
-                    LocalDate dateN = rs.getObject("date_naissance", LocalDate.class);
-                    ligne.setDateNaissance(dateN);
-                    ligne.setPoids(rs.getDouble("poids"));
-                    ligne.setAnnee(rs.getInt("annee"));
-                    ligne.setGenre(rs.getString("genre"));
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToEleve(rs);
                 }
             }
         }
-        if(ligne == null)
-            System.out.println("Aucun eleve trouve.");
-        return ligne;
+        System.out.println("Aucun eleve trouve.");
+        return null;
     }
 
     @Override
@@ -89,23 +81,14 @@ public class EleveDAOImpl implements EleveDAO {
         //        (penser à ajouter '%' pour une recherche partielle)
         String sql = "SELECT * FROM ELEVES WHERE NOM LIKE ?";
         List<Eleve> eleves = new ArrayList<>();
-        try(Connection connection = ConnectionManager.getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(sql)){
-                pstmt.setString(1, "%" + nom + "%");
-                try(ResultSet rs = pstmt.executeQuery()){
-                    while(rs.next()){
-                        Eleve ligne = new Eleve();
-                        ligne.setNumEleve(rs.getInt("num_eleve"));
-                        ligne.setNom(rs.getString("nom"));
-                        ligne.setPrenom(rs.getString("prenom"));
-                        LocalDate dateN = rs.getObject("date_naissance", LocalDate.class);
-                        ligne.setDateNaissance(dateN);
-                        ligne.setPoids(rs.getDouble("poids"));
-                        ligne.setAnnee(rs.getInt("annee"));
-                        ligne.setGenre(rs.getString("genre"));
-                        eleves.add(ligne);
-                    }
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + nom + "%");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    eleves.add(mapResultSetToEleve(rs));
                 }
+            }
         }
         if(eleves.isEmpty()){
             System.out.println("Aucun eleve trouve.");
