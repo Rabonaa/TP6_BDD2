@@ -49,10 +49,9 @@ public class EleveDAOImpl implements EleveDAO {
                     eleves.add(ligne);
                 }
             }
-
         }
         if(eleves.isEmpty()){
-            throw new UnsupportedOperationException("À implémenter — Question 4");
+            throw new UnsupportedOperationException("Aucun eleve trouve.");
         }
         return eleves;
     }
@@ -60,7 +59,27 @@ public class EleveDAOImpl implements EleveDAO {
     @Override
     public Eleve findById(int numEleve) throws SQLException {
         // TODO : SELECT * FROM ELEVES WHERE NUM_ELEVE = ?
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+        String sql = "SELECT * FROM ELEVES WHERE NUM_ELEVE = ?";
+        Eleve eleve = new Eleve();
+        try(Connection connection = ConnectionManager.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setInt(1, numEleve);
+            try(ResultSet rs = pstmt.executeQuery()){
+                if(rs.next()){
+                    eleve.setNumEleve(rs.getInt("num_eleve"));
+                    eleve.setNom(rs.getString("nom"));
+                    eleve.setPrenom(rs.getString("prenom"));
+                    LocalDate dateN = rs.getObject("date_naissance", LocalDate.class);
+                    eleve.setDateNaissance(dateN);
+                    eleve.setPoids(rs.getFloat("poids"));
+                    eleve.setAnnee(rs.getInt("annee"));
+                    eleve.setGenre(rs.getString("genre"));
+                }
+            }
+        }
+        if(eleve == null)
+            throw new UnsupportedOperationException("Eleve non trouve.");
+        return eleve;
     }
 
     @Override
