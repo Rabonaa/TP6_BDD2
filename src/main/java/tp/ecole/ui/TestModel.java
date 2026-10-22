@@ -24,7 +24,5 @@ public class TestModel {
         Resultat resultat1 = new Resultat(1, 1, 15.0);
         System.out.println(resultat1);
 
-        ResultatDAOImpl result = new result();
-
     }
 }

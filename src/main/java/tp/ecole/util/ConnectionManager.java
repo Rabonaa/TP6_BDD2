@@ -20,7 +20,7 @@ public class ConnectionManager {
     // ---------------------------------------------------------------
     // TODO : renseignez les paramètres de connexion
     // ---------------------------------------------------------------
-    private static final String DB_URL      = "jdbc:mysql://127.0.0.1:3306/?user=mark";
+    private static final String DB_URL      = "jdbc:mysql://127.0.0.1:3306/ecole4?user=mark";
     private static final String DB_USER     = "mark";       // à modifier
     private static final String DB_PASSWORD = "mot_de_passe";           // à modifier
     // ---------------------------------------------------------------

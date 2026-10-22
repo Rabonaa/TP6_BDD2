@@ -29,7 +29,7 @@ public class MainTestDAO {
 
         // ---- Données de test ----
         // Numéro élevé pour ne pas entrer en conflit avec les données existantes
-        int numEleve = 999;
+        int numEleve = 20;
 
         System.out.println("=== TEST DAO : EleveDAOImpl ===\n");
 
@@ -45,6 +45,16 @@ public class MainTestDAO {
             //   nouvelEleve.setPrenom("TestPrenom");
             //   nouvelEleve.setAnnee(1);
             //   ... etc.
+
+            nouvelEleve.setNumEleve(numEleve);
+            nouvelEleve.setNom("TestNom");
+            nouvelEleve.setPrenom("TestPrenom");
+            nouvelEleve.setDateNaissance(LocalDate.of(2008, 5, 14));
+            nouvelEleve.setPoids(70.2);
+            nouvelEleve.setAnnee(1);
+            nouvelEleve.setGenre("M");
+
+
             eleveDAO.save(nouvelEleve);
             System.out.println("[OK] Élève inséré : " + nouvelEleve);
 
@@ -60,7 +70,7 @@ public class MainTestDAO {
             // ÉTAPE 3 : Recherche par nom
             // -------------------------------------------------
             System.out.println("\n--- Étape 3 : Recherche par nom 'Test' ---");
-            List<Eleve> trouves = eleveDAO.findByNom("Test");
+            List<Eleve> trouves = eleveDAO.findByNom("TestNom");
             trouves.forEach(e -> System.out.println("  Trouvé : " + e));
 
             // -------------------------------------------------
@@ -69,6 +79,7 @@ public class MainTestDAO {
             System.out.println("\n--- Étape 4 : Modification du nom ---");
             // TODO : modifier un attribut de nouvelEleve
             //   nouvelEleve.setNom("NomModifie");
+            nouvelEleve.setNom("NomModifie");
             eleveDAO.update(nouvelEleve);
             Eleve apresModif = eleveDAO.findById(numEleve);
             System.out.println("[OK] Après modification : " + apresModif);

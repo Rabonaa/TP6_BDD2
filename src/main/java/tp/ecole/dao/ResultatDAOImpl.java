@@ -44,7 +44,7 @@ public class ResultatDAOImpl implements ResultatDAO {
                 while (rs.next()){
                     Resultat resultat = new Resultat();
                     resultat.setNumEleve(rs.getInt("num_eleve"));
-                    resultat.setNumEleve(rs.getInt("num_cours"));
+                    resultat.setNumCours(rs.getInt("num_cours"));
                     resultat.setPoints(rs.getDouble("note"));
                     resultats.add(resultat);
                 }
@@ -60,7 +60,16 @@ public class ResultatDAOImpl implements ResultatDAO {
     @Override
     public void enregistrerInscription(int numEleve, int numCours) throws SQLException {
         // TODO : Ajouter une nouvelle ligne de note pour un élève, mais sans spécifier les points
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+        String sql = "INSERT INTO RESULTATS (NUM_ELEVE, NUM_COURS)" +
+                    "VALUES (?, ?)";
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, numEleve);
+            pstmt.setInt(2, numCours);
+            pstmt.executeUpdate();
+        }
+
     }
 
     @Override
@@ -68,6 +77,14 @@ public class ResultatDAOImpl implements ResultatDAO {
         // TODO : Affecter une note à un élève pour un cours donné.
         // Question 6 (service): Une fois le trigger de contrôle de note créé, une note invalide
         // provoquera une SQLException ici -> le rollback sera déclenché dans EcoleService
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+        // throw new UnsupportedOperationException("À implémenter — Question 4");
+        String sql = "UPDATE RESULTATS SET POINTS=? WHERE NUM_ELEVE=? AND NUM_COURS=? ";
+        try(Connection connection = ConnectionManager.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sql)){
+            pstmt.setDouble(1, points);
+            pstmt.setInt(2, numEleve);
+            pstmt.setInt(3, numCours);
+            pstmt.executeUpdate();
+        }
     }
 }
