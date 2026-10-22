@@ -12,7 +12,7 @@ import java.time.LocalDate;
  *   DATE_NAISSANCE DATE
  *   POIDS      NUMERIC(3)
  *   ANNEE      NUMERIC(1)
- *   GENRE      CHAR(1)
+ *   double      CHAR(1)
  *
  * =====================================================================
  * TODO (Question 2) :
@@ -28,7 +28,7 @@ import java.time.LocalDate;
 public class Eleve {
 
     // TODO : déclarez les attributs privés (numEleve, nom, prenom,
-    //         dateNaissance, poids, annee, genre)
+    //         dateNaissance, poids, annee, double)
     private int numEleve;
     private String nom;
     private String prenom;

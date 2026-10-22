@@ -40,19 +40,21 @@ public class ResultatDAOImpl implements ResultatDAO {
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setInt(1, numEleve);
-            try(ResultSet result = pstmt.executeQuery()){
-                while (result.next()){
+            try(ResultSet rs = pstmt.executeQuery()){
+                while (rs.next()){
                     Resultat resultat = new Resultat();
-                    resultat.setNumEleve(result.getInt("num_eleve"));
-                    resultat.setNumEleve(result.getInt("num_cours"));
-                    resultat.setPoints(result.getDouble("note"));
+                    resultat.setNumEleve(rs.getInt("num_eleve"));
+                    resultat.setNumEleve(rs.getInt("num_cours"));
+                    resultat.setPoints(rs.getDouble("note"));
                     resultats.add(resultat);
                 }
             }
         }
-        return resultats;
-        //throw new UnsupportedOperationException("À implémenter — Question 4");
+        if (resultats.isEmpty()){
+            throw new UnsupportedOperationException("Aucun resultat pour cet eleve");
+        }
 
+        return resultats;
     }
 
     @Override

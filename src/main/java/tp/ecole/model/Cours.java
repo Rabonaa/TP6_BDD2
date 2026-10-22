@@ -28,7 +28,7 @@ public class Cours {
     // TODO : constructeur par défaut
     public Cours(){}
     // TODO : constructeur avec tous les paramètres
-    public Cours(int nummCours, String nom, double nbHeures, int annee){
+    public Cours(int numCours, String nom, double nbHeures, int annee){
         this.numCours = numCours;
         this.nom = nom;
         this.nbHeures = nbHeures;

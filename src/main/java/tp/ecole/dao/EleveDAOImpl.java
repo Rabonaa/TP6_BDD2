@@ -4,6 +4,7 @@ import tp.ecole.model.Eleve;
 import tp.ecole.util.ConnectionManager;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,30 @@ public class EleveDAOImpl implements EleveDAO {
     @Override
     public List<Eleve> findAll() throws SQLException {
         // TODO : interroger la table ELEVES et retourner tous les élèves
-        throw new UnsupportedOperationException("À implémenter — Question 4");
+        String sql = "SELECT * FROM Eleves";
+        List<Eleve> eleves = new ArrayList<>();
+        try(Connection connection = ConnectionManager.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sql)){
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    Eleve ligne = new Eleve();
+                    ligne.setNumEleve(rs.getInt("num_eleve"));
+                    ligne.setNom(rs.getString("nom"));
+                    ligne.setPrenom(rs.getString("prenom"));
+                    LocalDate dateN = rs.getObject("date_naissance", LocalDate.class);
+                    ligne.setDateNaissance(dateN);
+                    ligne.setPoids(rs.getFloat("poids"));
+                    ligne.setAnnee(rs.getInt("annee"));
+                    ligne.setGenre(rs.getString("genre"));
+                    eleves.add(ligne);
+                }
+            }
+
+        }
+        if(eleves.isEmpty()){
+            throw new UnsupportedOperationException("À implémenter — Question 4");
+        }
+        return eleves;
     }
 
     @Override

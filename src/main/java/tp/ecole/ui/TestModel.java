@@ -1,5 +1,7 @@
 package tp.ecole.ui;
 
+import tp.ecole.dao.ResultatDAO;
+import tp.ecole.dao.ResultatDAOImpl;
 import tp.ecole.model.Cours;
 import tp.ecole.model.Eleve;
 import tp.ecole.model.Resultat;
@@ -21,6 +23,8 @@ public class TestModel {
 
         Resultat resultat1 = new Resultat(1, 1, 15.0);
         System.out.println(resultat1);
+
+        ResultatDAOImpl result = new result();
 
     }
 }
