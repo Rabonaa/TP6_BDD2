@@ -4,6 +4,7 @@ import tp.ecole.dao.ResultatDAO;
 import tp.ecole.dao.ResultatDAOImpl;
 import tp.ecole.util.ConnectionManager;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -71,4 +72,21 @@ public class EcoleService {
     //
     //   public void passageClasse(int numEleve) throws SQLException { ... }
     // ---------------------------------------------------------------
+    public void passageClasse(int numEleve) throws SQLException {
+        String sql = "{CALL passage_de_classe(?)}";
+
+        try (Connection conn = ConnectionManager.getConnection()) {
+            conn.setAutoCommit(false);
+
+            try (CallableStatement cstmt = conn.prepareCall(sql)) {
+                cstmt.setInt(1, numEleve);
+                cstmt.executeUpdate();
+
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+        }
+    }
 }

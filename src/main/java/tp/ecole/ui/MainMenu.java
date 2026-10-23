@@ -47,6 +47,12 @@ public class MainMenu {
                     case "3" -> listerResultatsEleve();
                     case "4" -> inscrireEtNoter();
                     case "5" -> modifierNote();
+                    case "6" -> {
+                        System.out.print("Numéro de l'élève à faire passer en classe supérieure : ");
+                        int numEleve = lireEntier();
+                        service.passageClasse(numEleve);
+                        System.out.printf("✓ L'élève n°%d est passé en classe supérieure !%n", numEleve);
+                    }
                     case "0" -> {
                         System.out.println("Au revoir !");
                         running = false;
@@ -74,6 +80,7 @@ public class MainMenu {
         System.out.println("│  3. Voir les résultats d'un élève        │");
         System.out.println("│  4. Inscrire un élève à un cours + note  │");
         System.out.println("│  5. Modifier une note                    │");
+        System.out.println("│  6. Effectuer un passage de classe       │");
         System.out.println("│  0. Quitter                              │");
         System.out.println("└──────────────────────────────────────────┘");
         System.out.print("Votre choix : ");
