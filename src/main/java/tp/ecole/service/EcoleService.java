@@ -49,7 +49,19 @@ public class EcoleService {
      */
     public void inscrireEtAttribuerNote(int numEleve, int numCours, double points) throws SQLException {
         // TODO : implémenter la logique transactionnelle décrite ci-dessus
-        throw new UnsupportedOperationException("À implémenter — Question 6");
+        // throw new UnsupportedOperationException("À implémenter — Question 6");
+        try(Connection connection = ConnectionManager.getConnection()){
+                connection.setAutoCommit(false);
+            try{
+                ResultatDAO resultatDAO = new ResultatDAOImpl(connection);
+                resultatDAO.enregistrerInscription(numEleve, numCours);
+                resultatDAO.modifierNote(numEleve, numCours, points);
+                connection.commit();
+            }catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
+        }
     }
 
     // ---------------------------------------------------------------

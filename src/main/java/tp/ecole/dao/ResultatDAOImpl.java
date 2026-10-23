@@ -30,46 +30,81 @@ import java.util.List;
  */
 public class ResultatDAOImpl implements ResultatDAO {
 
+    private Connection connectionExterne;
+
+    public ResultatDAOImpl() {
+        this.connectionExterne = null;
+    }
+
+    public ResultatDAOImpl(Connection connection) {
+        this.connectionExterne = connection;
+    }
     @Override
     public List<Resultat> findByEleve(int numEleve) throws SQLException {
         // TODO : Retourner une liste de résultats pour un élève donné
         List<Resultat> resultats = new ArrayList<>();
+        String sql = "SELECT * FROM RESULTATS WHERE num_eleve = ?";
 
-        String sql = "SELECT * FROM Resultat WHERE num_eleve = ?";
-        try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        Connection conn;
+        boolean estExterne;
 
+        if (connectionExterne != null) {
+            conn = connectionExterne;
+            estExterne = true;
+        } else {
+            conn = ConnectionManager.getConnection();
+            estExterne = false;
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, numEleve);
-            try(ResultSet rs = pstmt.executeQuery()){
-                while (rs.next()){
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
                     Resultat resultat = new Resultat();
                     resultat.setNumEleve(rs.getInt("num_eleve"));
                     resultat.setNumCours(rs.getInt("num_cours"));
-                    resultat.setPoints(rs.getDouble("note"));
+                    resultat.setPoints(rs.getDouble("points"));
                     resultats.add(resultat);
                 }
             }
+        } finally {
+            if (!estExterne) {
+                if (conn != null) {
+                    conn.close();
+                }
+            }
         }
-        if (resultats.isEmpty()){
-            throw new UnsupportedOperationException("Aucun resultat pour cet eleve");
-        }
-
         return resultats;
     }
 
     @Override
     public void enregistrerInscription(int numEleve, int numCours) throws SQLException {
         // TODO : Ajouter une nouvelle ligne de note pour un élève, mais sans spécifier les points
-        String sql = "INSERT INTO RESULTATS (NUM_ELEVE, NUM_COURS)" +
+        String sql = "INSERT INTO RESULTATS (NUM_ELEVE, NUM_COURS) " +
                     "VALUES (?, ?)";
-        try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
+        Connection conn;
+        boolean estExterne;
+
+        if (connectionExterne != null) {
+            conn = connectionExterne;
+            estExterne = true;
+        } else {
+            conn = ConnectionManager.getConnection();
+            estExterne = false;
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, numEleve);
             pstmt.setInt(2, numCours);
             pstmt.executeUpdate();
+        } finally {
+            if (!estExterne) {
+                if (conn != null) {
+                    conn.close();
+                }
+            }
         }
-
     }
 
     @Override
@@ -78,13 +113,30 @@ public class ResultatDAOImpl implements ResultatDAO {
         // Question 6 (service): Une fois le trigger de contrôle de note créé, une note invalide
         // provoquera une SQLException ici -> le rollback sera déclenché dans EcoleService
         // throw new UnsupportedOperationException("À implémenter — Question 4");
-        String sql = "UPDATE RESULTATS SET POINTS=? WHERE NUM_ELEVE=? AND NUM_COURS=? ";
-        try(Connection connection = ConnectionManager.getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(sql)){
+        String sql = "UPDATE RESULTATS SET POINTS=? WHERE NUM_ELEVE=? AND NUM_COURS=?";
+
+        Connection conn;
+        boolean estExterne;
+
+        if (connectionExterne != null) {
+            conn = connectionExterne;
+            estExterne = true;
+        } else {
+            conn = ConnectionManager.getConnection();
+            estExterne = false;
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setDouble(1, points);
             pstmt.setInt(2, numEleve);
             pstmt.setInt(3, numCours);
             pstmt.executeUpdate();
+        } finally {
+            if (!estExterne) {
+                if (conn != null) {
+                    conn.close();
+                }
+            }
         }
     }
 }
