@@ -40,10 +40,10 @@ public class Cours {
     public double getNbHeures(){return nbHeures;}
     public int getAnnee(){return annee;}
 
-    public void setNumCours(){this.numCours = numCours;}
-    public void setNom(){this.nom = nom;}
-    public void nbHeures(){this.nbHeures = nbHeures;}
-    public void annee(){this.annee = annee;}
+    public void setNumCours(int numCours){this.numCours = numCours;}
+    public void setNom(String nom){this.nom = nom;}
+    public void setnbHeures(double nbHeures){this.nbHeures = nbHeures;}
+    public void setannee(int annee){this.annee = annee;}
 
     // TODO : toString()
     @Override
