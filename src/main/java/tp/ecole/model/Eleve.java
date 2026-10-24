@@ -63,7 +63,8 @@ public class Eleve {
     public void setNumEleve(int numEleve){this.numEleve = numEleve;}
     public void setNom(String nom){this.nom = nom;}
     public void setPrenom(String prenom){this.prenom = prenom;}
-    public void setDateNaissance(LocalDate dateNaissance){this.dateNaissance = dateNaissance;}
+    public void setDateNaissance(LocalDate dateNaissance)
+        {this.dateNaissance = dateNaissance;}
     public void setPoids(double poids){this.poids = poids;}
     public void setAnnee(int annee){this.annee = annee;}
     public void setGenre(String genre){this.genre = genre;}

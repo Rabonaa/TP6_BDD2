@@ -122,7 +122,7 @@ public class EleveDAOImpl implements EleveDAO {
     @Override
     public void update(Eleve eleve) throws SQLException {
         // TODO : UPDATE ELEVES SET NOM=?, PRENOM=?, ... WHERE NUM_ELEVE=?
-//        throw new UnsupportedOperationException("Erreur");
+        //throw new UnsupportedOperationException("Erreur");
         String sql = "UPDATE ELEVES SET NOM=?, PRENOM=?, DATE_NAISSANCE=?, POIDS=?, ANNEE=?, GENRE=? " +
                 "WHERE NUM_ELEVE=?";
         try(Connection connection = ConnectionManager.getConnection();
